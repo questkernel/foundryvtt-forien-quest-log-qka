@@ -505,6 +505,12 @@ export class QuestPreview extends foundry.appv1.api.FormApplication
 
          html.on(jquery.click, '.add-subquest-btn', async () => await HandlerManage.addSubquest(this.#quest, this));
 
+         html.on(jquery.click, '.subquest-unlink',
+          async (event) => await HandlerManage.unlinkSubquest(event, this.#quest, this));
+
+         html.on(jquery.drop, '.subquests-box',
+          async (event) => await HandlerManage.linkSubquestDrop(event, this.#quest, this));
+
          html.on(jquery.click, '.configure-perm-btn', () => HandlerManage.configurePermissions(this.#quest, this));
 
          html.on(jquery.click, '.delete-splash', async () => await HandlerManage.deleteSplashImage(this.#quest, this));

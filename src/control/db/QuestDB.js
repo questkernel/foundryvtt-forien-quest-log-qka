@@ -437,6 +437,145 @@ export class QuestDB
    }
 
    /**
+    * Links an existing quest as a subquest of another quest.
+    *
+    * If the child already has a parent, it is cleanly reparented.
+    *
+    * Safeguards:
+    * - prevent self-linking
+    * - prevent duplicate links
+    * - prevent circular parent / child chains
+    *
+    * @param {object}   options - Optional parameters.
+    *
+    * @param {string}   options.parentId - The target parent quest ID.
+    *
+    * @param {string}   options.childId - The existing quest ID to link as a child.
+    *
+    * @returns {Promise<object>} Result object.
+    */
+   static async linkExistingSubquest({ parentId, childId } = {})
+   {
+      const parentQuest = QuestDB.getQuest(parentId);
+      const childQuest = QuestDB.getQuest(childId);
+
+      if (!parentQuest || !childQuest)
+      {
+         return { ok: false, reason: 'not-found' };
+      }
+
+      if (parentQuest.id === childQuest.id)
+      {
+         return { ok: false, reason: 'self' };
+      }
+
+      if (parentQuest.subquests.includes(childQuest.id))
+      {
+         return { ok: false, reason: 'duplicate' };
+      }
+
+      // Prevent circular chains by walking upward from the proposed parent.
+      let currentQuest = parentQuest;
+
+      while (currentQuest)
+      {
+         if (currentQuest.id === childQuest.id)
+         {
+            return { ok: false, reason: 'circular' };
+         }
+
+         currentQuest = currentQuest.parent ? QuestDB.getQuest(currentQuest.parent) : null;
+      }
+
+      const oldParentQuest = childQuest.parent ? QuestDB.getQuest(childQuest.parent) : null;
+      const refreshIds = new Set([parentQuest.id, childQuest.id]);
+
+      // If the quest is already parented elsewhere, remove that relationship first.
+      if (oldParentQuest)
+      {
+         oldParentQuest.removeSubquest(childQuest.id);
+         await oldParentQuest.save();
+         refreshIds.add(oldParentQuest.id);
+      }
+
+      childQuest.parent = parentQuest.id;
+      parentQuest.addSubquest(childQuest.id);
+
+      await childQuest.save();
+      await parentQuest.save();
+
+      for (const questId of refreshIds)
+      {
+         Socket.refreshQuestPreview({ questId });
+      }
+
+      Socket.refreshAll();
+
+      return {
+         ok: true,
+         reason: oldParentQuest ? 'reparented' : 'linked',
+         oldParentId: oldParentQuest?.id ?? null,
+         refreshIds: Array.from(refreshIds)
+      };
+   }
+
+   /**
+    * Unlinks an existing subquest without deleting either quest.
+    *
+    * @param {object}   options - Optional parameters.
+    *
+    * @param {string}   options.parentId - The current parent quest ID.
+    *
+    * @param {string}   options.childId - The child quest ID to unlink.
+    *
+    * @returns {Promise<object>} Result object.
+    */
+   static async unlinkSubquest({ parentId, childId } = {})
+   {
+      const parentQuest = QuestDB.getQuest(parentId);
+      const childQuest = QuestDB.getQuest(childId);
+
+      if (!parentQuest || !childQuest)
+      {
+         return { ok: false, reason: 'not-found' };
+      }
+
+      const isLinked =
+       parentQuest.subquests.includes(childQuest.id) ||
+       childQuest.parent === parentQuest.id;
+
+      if (!isLinked)
+      {
+         return { ok: false, reason: 'not-linked' };
+      }
+
+      parentQuest.removeSubquest(childQuest.id);
+
+      if (childQuest.parent === parentQuest.id)
+      {
+         childQuest.parent = null;
+      }
+
+      await childQuest.save();
+      await parentQuest.save();
+
+      const refreshIds = [parentQuest.id, childQuest.id];
+
+      for (const questId of refreshIds)
+      {
+         Socket.refreshQuestPreview({ questId });
+      }
+
+      Socket.refreshAll();
+
+      return {
+         ok: true,
+         reason: 'unlinked',
+         refreshIds
+      };
+   }
+
+   /**
     * Invoke with either a Quest instance or quest ID to delete the quest and update the QuestDB and parent / child
     * relationships. This is an atomic sequence such that the quest is deleted via deleting the backing journal entry
     * and before control resumes to the invoke point the in-memory DB also has the associated QuestEntry deleted.
@@ -451,6 +590,7 @@ export class QuestDB
     *
     * @returns {Promise<DeleteData|void>} The IDs for quests that were updated.
     */
+
    static async deleteQuest({ quest, questId } = {})
    {
       const deleteId = quest ? quest.id : questId;
@@ -1331,7 +1471,7 @@ class QuestEntry
        */
       this.isPersonal = void 0;
 
-      /**
+/**
        * Stores all adjacent quest IDs including any parent, subquests, and this quest.
        *
        * @type {string[]}
