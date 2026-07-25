@@ -31,9 +31,9 @@
     <h2>{{localize 'ForienQuestLog.QuestPreview.Management.QuestBranching'}}</h2>
     <button class="btn add-subquest-btn"><i class="fas fa-plus"></i> {{localize 'ForienQuestLog.QuestPreview.Management.AddSubquest'}}</button>
   </header>
-  <ul class="subquests-box">
+    <ul class="subquests-box">
     {{#each data_subquest}}
-    <li class="subquest-item" title="{{statusTooltip}}">
+    <li class="subquest-item" data-quest-id="{{id}}" title="{{statusTooltip}}">
       {{#if isPrimary}}<i class="is-primary fas fa-star pad-l-4" title="{{localize 'ForienQuestLog.Tooltips.PrimaryQuest'}}"></i>{{/if}}
       {{#if ../canEdit}}
         {{#if isHidden}}<i class="is-hidden fas fa-eye-slash pad-l-4" title="{{localize 'ForienQuestLog.Tooltips.HiddenQuestNoPlayers'}}"></i>{{/if}}
@@ -42,6 +42,16 @@
       <h2 class="quest-name-link" data-quest-id="{{id}}">{{name}}</h2>
       {{#if statusActions.length}}
         {{{statusActions}}}
+      {{/if}}
+
+      {{#if ../canEdit}}
+      <a
+        class="subquest-unlink"
+        data-quest-id="{{id}}"
+        data-tooltip="Unlink subquest"
+      >
+        <i class="fas fa-unlink"></i>
+      </a>
       {{/if}}
     </li>
     {{/each}}

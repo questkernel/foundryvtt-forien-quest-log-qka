@@ -60,8 +60,11 @@ export class ViewManager
       try
       {
          const position = JSON.parse(game.settings.get(constants.moduleName, settings.questTrackerPosition));
-         if (position && position.width && position.height)
+         if (position && position.width)
          {
+            // Safety for dnd5e / UI skins: older bad saves can store a title-bar-only height.
+            if (!Number.isFinite(Number(position.height)) || Number(position.height) < 220) { position.height = 480; }
+            if (!Number.isFinite(Number(position.top))) { position.top = 80; }
             this.#Apps.questTracker.position = position;
          }
       }
