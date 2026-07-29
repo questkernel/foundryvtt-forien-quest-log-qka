@@ -1,134 +1,155 @@
 {
   "id": "forien-quest-log",
   "title": "Forien's Quest Log",
-  "description": "Provides comprehensive Quest Log system for players and Game Masters",
+  "description": "<p>Provides comprehensive Quest Log system for players and Game Masters</p>",
   "authors": [
     {
       "name": "Forien",
-      "url": "https://www.patreon.com/foundryworkshop"
+      "url": "https://www.patreon.com/foundryworkshop",
+      "flags": {}
     },
     {
       "name": "Michael Leahy (TyphonJS)",
-      "url": "https://www.typhonjs.io"
+      "url": "https://www.typhonjs.io",
+      "flags": {}
     }
   ],
   "url": "https://github.com/Forien/foundryvtt-forien-quest-log",
   "readme": "https://github.com/Forien/foundryvtt-forien-quest-log/blob/master/README.md",
   "bugs": "https://github.com/Forien/foundryvtt-forien-quest-log/issues",
   "changelog": "https://github.com/Forien/foundryvtt-forien-quest-log/releases/latest/",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "compatibility": {
-    "minimum": "13",
-    "verified": "13",
-    "maximum": "13"
+    "minimum": "14",
+    "verified": "14",
+    "maximum": "14"
   },
   "esmodules": [
-    "./src/init.js"
+    "src/init.js"
   ],
   "styles": [
-    "./css/init.css"
+    {
+      "src": "css/init.css"
+    }
   ],
   "languages": [
     {
       "lang": "cn",
       "name": "中文（简体",
-      "path": "lang/cn.json"
+      "path": "lang/cn.json",
+      "flags": {}
     },
     {
       "lang": "de",
       "name": "Deutsch",
-      "path": "lang/de.json"
+      "path": "lang/de.json",
+      "flags": {}
     },
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "es",
       "name": "Español",
-      "path": "lang/es.json"
+      "path": "lang/es.json",
+      "flags": {}
     },
     {
       "lang": "fi-Fl",
       "name": "Finnish",
-      "path": "lang/fi-FI.json"
+      "path": "lang/fi-FI.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "Français",
-      "path": "lang/fr.json"
+      "path": "lang/fr.json",
+      "flags": {}
     },
     {
       "lang": "it",
       "name": "Italiano",
-      "path": "lang/it.json"
+      "path": "lang/it.json",
+      "flags": {}
     },
     {
       "lang": "ja",
       "name": "日本語",
-      "path": "lang/ja.json"
+      "path": "lang/ja.json",
+      "flags": {}
     },
     {
       "lang": "ko",
       "name": "한국어",
-      "path": "lang/ko.json"
+      "path": "lang/ko.json",
+      "flags": {}
     },
     {
       "lang": "nl",
       "name": "Nederlands",
-      "path": "lang/nl.json"
+      "path": "lang/nl.json",
+      "flags": {}
     },
     {
       "lang": "pl",
       "name": "Polski",
-      "path": "lang/pl.json"
+      "path": "lang/pl.json",
+      "flags": {}
     },
     {
       "lang": "pt-BR",
       "name": "Português (Brasil)",
-      "path": "lang/pt-BR.json"
+      "path": "lang/pt-BR.json",
+      "flags": {}
     },
     {
       "lang": "ru",
       "name": "Russian",
-      "path": "lang/ru.json"
+      "path": "lang/ru.json",
+      "flags": {}
     },
     {
       "lang": "sv",
       "name": "Svenska",
-      "path": "lang/sv.json"
+      "path": "lang/sv.json",
+      "flags": {}
     },
     {
       "lang": "zh-tw",
       "name": "正體中文",
-      "path": "lang/zh-tw.json"
+      "path": "lang/zh-tw.json",
+      "flags": {}
     }
   ],
   "packs": [
     {
       "name": "macros-gm",
       "label": "FQL Macros (GM)",
-      "module": "forien-quest-log",
-      "path": "./packs/macro-gm.db",
+      "path": "packs/macro-gm",
       "type": "Macro",
       "ownership": {
         "PLAYER": "NONE",
         "ASSISTANT": "OWNER"
-      }
+      },
+      "flags": {}
     },
     {
       "name": "macros-player",
       "label": "FQL Macros (Player)",
-      "module": "forien-quest-log",
-      "path": "./packs/macro-player.db",
-      "type": "Macro"
+      "path": "packs/macro-player",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "flags": {}
     }
   ],
   "socket": true,
   "manifest": "https://github.com/Forien/foundryvtt-forien-quest-log/releases/latest/download/module.json",
   "download": "https://github.com/Forien/foundryvtt-forien-quest-log/releases/download/0.9.0/module.zip",
-  "protected": false,
-  "coreTranslation": false,
-  "library": false
+  "flags": {}
 }

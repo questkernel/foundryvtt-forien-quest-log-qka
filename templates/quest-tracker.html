@@ -2,7 +2,7 @@
   <header class="window-header flexrow">
     <h4 class="window-title">{{title}}</h4>
     {{#each headerButtons}}
-    <a class="header-button {{this.class}}"><i class="{{this.icon}}" title="{{localize this.title}}"></i>{{localize this.label}}</a>
+    <a class="header-button {{this.class}}" data-action="{{this.class}}" role="button" tabindex="0" draggable="false"><i class="{{this.icon}}" title="{{localize this.title}}"></i>{{localize this.label}}</a>
     {{/each}}
   </header>
 

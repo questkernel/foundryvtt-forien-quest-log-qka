@@ -31,7 +31,7 @@ export class ModuleSettings
     *
     * @type {{top: number, width: number}}
     */
-   static #defaultQuestTrackerPosition = { top: 80, width: 296 };
+   static #defaultQuestTrackerPosition = { top: 80, width: 296, height: 480 };
 
    /**
     * Constants for setting scope type.

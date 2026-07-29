@@ -149,6 +149,8 @@ export class QuestLog extends foundry.appv1.api.Application
     */
    async close(options)
    {
+      if (!options || typeof options !== 'object' || options instanceof Event) { options = {}; }
+
       FQLDialog.closeDialogs({ isQuestLog: true });
       return super.close(options);
    }

@@ -56,9 +56,20 @@ export class HandlerTracker
     *
     * @param {QuestTracker}   questTracker - The QuestTracker
     */
-   static async headerPointerUp(event, header, questTracker)
+      static async headerPointerUp(event, header, questTracker)
    {
-      header.releasePointerCapture(event.pointerId);
+      try
+      {
+         if (header.hasPointerCapture?.(event.pointerId))
+         {
+            header.releasePointerCapture(event.pointerId);
+         }
+      }
+      catch (err)
+      {
+         // Ignore pointer capture mismatches.
+      }
+
       questTracker._dragHeader = false;
 
       if (questTracker._inPinDropRect)

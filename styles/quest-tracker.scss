@@ -1,9 +1,9 @@
 #quest-tracker {
-  pointer-events: none;
+  pointer-events: auto;
   min-width: 275px;
   min-height: 72px;
-  max-width: 400px;
-  max-height: 750px;
+  max-width: min(720px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
 
   @keyframes fql-jiggle {
     0% {
@@ -243,4 +243,55 @@
       }
     }
   }
+}
+
+// QKA tracker drag / resize hardening for dnd5e + Foundry non-popout shell.
+#quest-tracker {
+  overflow: hidden;
+  touch-action: none;
+
+  &.fql-window-app {
+    position: absolute;
+  }
+
+  .window-header {
+    cursor: move;
+    touch-action: none;
+    user-select: none;
+
+    .header-button {
+      cursor: pointer;
+      pointer-events: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-button i {
+      pointer-events: none;
+    }
+  }
+
+  .window-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  .window-resizable-handle {
+    bottom: 0;
+    cursor: nwse-resize;
+    height: 22px;
+    opacity: 0.85;
+    pointer-events: auto;
+    right: 0;
+    touch-action: none;
+    width: 22px;
+    z-index: 20;
+  }
+}
+
+body.fql-tracker-resizing,
+body.fql-tracker-resizing * {
+  cursor: nwse-resize !important;
+  user-select: none !important;
 }
